@@ -2,7 +2,8 @@
 This is a script that will generate and overlay a minimap of the photos location. \
 This is the given example
 ![Malta](output/Example_overlay.png)
-if you use the --overlay false only the map will exported, this is that with some explanations
+
+if you use the --overlay false only the map will exported, this is that with some explanations 
 ![Malta](test/minimap_explanation.png)
 ## Install
 Clone this repository and install the necessary packages using
