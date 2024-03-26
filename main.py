@@ -30,7 +30,7 @@ def process_images(image_folder: str, trip_route: str, distance: float,
         images = [os.path.basename(image_folder)]
         image_folder = os.path.dirname(image_folder)
     else:
-        images = os.listdir(image_folder)[:2]
+        images = os.listdir(image_folder)
     images_len = len(images)
     for i, img in enumerate(images, start=1):
         try:
