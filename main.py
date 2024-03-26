@@ -53,7 +53,7 @@ def process_images(image_folder: str, trip_route: str, distance: float,
                                 datetime=data_dict['datetime'])
             if not overlay:
                 # Save figure with _map suffix
-                plt.savefig(os.path.join(output_folder, f'{img}_map.png'),
+                plt.savefig(os.path.join(output_folder, os.path.splitext(img)[0] + '_map.png'),
                             bbox_inches='tight', pad_inches=0)
                 logging.info(f'Saved map for {img}')
                 continue
@@ -69,7 +69,8 @@ def process_images(image_folder: str, trip_route: str, distance: float,
             # Paste to top right corner
             img_main.paste(map_img, (img_main.width - map_img.width, 0))
             logging.info(f'Overlaid map on {img}')
-            img_main.save(os.path.join(output_folder, img))
+            img_main.save(os.path.join(output_folder,
+                                       os.path.splitext(img)[0] + '_overlay.png'))
         except Exception as e:
             logging.error(f'Error processing {img}: {str(e)}')
 
@@ -118,9 +119,18 @@ def retricted_float(x):
     except ValueError:
         raise argparse.ArgumentTypeError(f"{x} not a floating-point literal")
 
-    if 0.0 < x <= 500:
+    if not 0.0 < x <= 500:
         raise argparse.ArgumentTypeError(f"{x} not in range [0.0, 500]")
     return x
+
+
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
 # Parse command-line arguments
@@ -137,7 +147,7 @@ def parse_args():
                         help='Map distance from the center in km.')
     parser.add_argument('--zoom', type=int, default=13, help='Map zoom level.',
                         choices=range(5, 21))
-    parser.add_argument('--overlay', type=bool, default=True,
+    parser.add_argument('--overlay', type=str2bool, default=True,
                         help='Overlay map on image, else only save map.')
     parser.add_argument('--output_folder', type=str, default='output',
                         help='Folder to save output images.')
